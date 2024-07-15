@@ -13,20 +13,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cliente {
+model User {
   id Int @id @default(autoincrement())
   name String
   email String @unique
+  type String
   password String
   endereco String
   telefone String
   createdAt DateTime @default(now())
+  Reservas Reservas[]
 
-  @@map("clientes")
+  @@map("usuarios")
 }
-model Cidade {
-  idCity Int @id @default(autoincrement())
-  Name String
+model Reservas {
+  id Int @id @default(autoincrement())
+  mesaId Int
+  mesa Mesas @relation(fields: [mesaId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  Date String
+  HorarioReservado String
+
+  @@map("reserva")
+}
+model Mesas {
+  id Int @id @default(autoincrement())
+  mesaCapact Int
+  Reservas  Reservas[]
+  Disponibilidade Disponibilidade[]
   
-  @@map("cidade")
+  @@map("mesa")
 }
+model Disponibilidade {
+  id Int @id @default(autoincrement())
+  mesaId Int
+  mesa Mesas @relation(fields: [mesaId], references: [id])
+  DateDisponivel String
+  hora_inicio String
+  hora_fim String
+  
+  @@map("disponibilidade")
+}
+model Pratos {
+  id Int @id @default(autoincrement())
+  pratoName String
+  pratoValor String
+  pratoDesc String
+  pratoClass String
+
+  @@map("prato")
+}
+
+
