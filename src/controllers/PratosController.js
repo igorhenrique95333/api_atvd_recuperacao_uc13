@@ -2,7 +2,6 @@ import { createPrato, findAllPratos } from "../models/Pratos.js";
 
 export const encontrarPratos = async (req, res) => {
     try {
-      console.log("aqui pratos")
       const pratos = await findAllPratos();
       res.status(200).json({ pratos });
     } catch (error) {

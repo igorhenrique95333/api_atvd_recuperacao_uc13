@@ -1,5 +1,5 @@
 import { findMesaById } from "../models/Mesa.js";
-import { createDiponibilidade } from "../models/Disponibilidade.js";
+import { createDiponibilidade, updateDisp } from "../models/Disponibilidade.js";
 
 export const create = async (req, res) => {
     try {
@@ -20,3 +20,17 @@ export const create = async (req, res) => {
             .json({ error: "Failed to create Diponibilidade", message: error.message });
     }
 };
+
+export const update = async (req, res) => {
+    try {
+      const id = req.params.id;
+      console.log(id)
+      const DispData = req.body;
+      const info = await updateDisp(id, DispData);
+      res.status(200).json({ info });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Failed to update disponibilidade", message: error.message });
+    }
+  };
