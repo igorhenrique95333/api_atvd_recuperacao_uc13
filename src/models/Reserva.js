@@ -15,74 +15,48 @@ export const createReserva = async (data) => {
   }
 };
 
-export const findAllres = async (filters = {}, sort, limit, offset) => {
+export const findResByIdUserDateTime = async (date,userId) => {
   try {
-    const { categoryId } = filters;
-    const whereClause = {
-      ...(categoryId && { category: { id: categoryId } }),
-      ...(filters.title && { title: { contains: filters.title } }),
-    };
-    return await prisma.ads.findMany({
-      where: whereClause,
-      include: {
-        images: true,
-        user: {
-          include: {
-            state: true,
-          },
-        },
-      },
-      orderBy: { createdAt: sort },
-      skip: offset,
-      take: limit,
-    });
-  } catch (error) {
-    throw new Error(`Failed to get ads: ${error.message}`);
-  }
-};
-
-export const findAdById = async (id) => {
-  try {
-    return await prisma.ads.findUnique({
-      where: { id },
-      include: { images: true },
-    });
-  } catch (error) {
-    throw new Error(`Failed to get ad by id: ${error.message}`);
-  }
-};
-
-export const updateAd = async (id, data) => {
-  try {
-    return await prisma.ads.update({
-      where: { id },
-      data: {
-        title: data.title,
-        userId: data.userId,
-        categoryId: data.categoryId,
-        price: data.price,
-        priceNegotiable: data.priceNegotiable,
-        description: data.description,
-        views: data.views || 0,
-        status: data.status !== undefined ? data.status : true,
-        images: {
-          create: data.images || [],
-        },
+    return await prisma.reservas.findMany({
+     where: {
+      Date: date,
+      userId:parseInt(userId),
       },
     });
   } catch (error) {
-    throw new Error(`Failed to update ads: ${error.message}`);
+    throw new Error(`Failed to get reserva: ${error.message}`);
   }
 };
 
-export const deleteAd = async (id) => {
+export const findResByDateTime = async (date) => {
   try {
-    return await prisma.ads.delete({
-      where: {
-        id,
+    return await prisma.reservas.findMany({
+     where: {
+      Date: date,
       },
     });
   } catch (error) {
-    throw new Error(`Failed to delete ads: ${error.message}`);
+    throw new Error(`Failed to get reserva: ${error.message}`);
   }
+};
+
+export const DelReserva = async (id) => {
+  return await prisma.reservas.delete({
+    where: {
+      id: parseInt(id),
+    },
+  });
+};
+
+export const updateRes = async (id, ResData) => {
+  return await prisma.reservas.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: {
+      mesaId: parseInt(ResData.mesaId),
+      HorarioReservado: ResData.horario,
+      Date: ResData.date,
+    },
+  });
 };

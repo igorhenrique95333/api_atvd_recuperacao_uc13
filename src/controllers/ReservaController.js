@@ -1,4 +1,4 @@
-  import {createReserva} from "../models/Reserva.js"
+  import {createReserva, findResByIdUserDateTime, findResByDateTime, DelReserva, updateRes} from "../models/Reserva.js"
   import { findUserByEmail } from "../models/User.js";
   import {findMesaById} from "../models/Mesa.js"
   import {findAllMesas} from "../models/Mesa.js"
@@ -96,87 +96,55 @@
         .json({ error: "Failed to create Ad", message: error.message });
     }
   };
+
+  export const encontrarReservaDataId = async (req, res) => {
+    try {
+      let userId = req.params.id;
+      let date = req.params.date;
+      const info = await findResByIdUserDateTime(date,userId);
+      res.status(200).json({ info });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Failed to get user", message: error.message });
+    }
+  };
+
+  export const encontrarReservaData = async (req, res) => {
+    try {
+      let date = req.params.date;
+      const info = await findResByDateTime(date);
+      res.status(200).json({ info });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Failed to get user", message: error.message });
+    }
+  }; 
   
-//   export const getList = async (req, res) => {
-//     try {
-//       let { sort = "asc", offset = 0, limit = 10, q, category } = req.query;
-//       let total = 0;
-//       let filters = { status: true };
-//       const adsTotal = await findAllAds(filters);
-//       total = adsTotal.length;
-//       if (q) filters.title = q;
-//       if (category) {
-//         const categoryId = await findCategoryByName(category);
-//         if (categoryId) filters.categoryId = categoryId.id;
-//       }
-//       limit = parseInt(limit);
-//       const adsData = await findAllAds(filters, sort, limit, parseInt(offset));
-//       let ads = [];
-//       for (let i in adsData) {
-//         let image;
-//         let defaultImg = adsData[i].images?.find((e) => e.default);
+  export const DeleteReserva = async (req, res) => {
+    try {
+      let id = req.body.id;
+      const info = await DelReserva(id);
+      res.status(200).json({ info });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Failed to get user", message: error.message });
+    }
+  };
   
-//         if (defaultImg) image = `${process.env.BASE}/media/${defaultImg.url}`;
-//         else image = `${process.env.BASE}/media/default.png`;
-//         ads.push({
-//           id: adsData[i].id,
-//           title: adsData[i].title,
-//           price: adsData[i].price,
-//           priceNegotiable: adsData[i].priceNegotiable,
-//           dateCreated: adsData[i].createdAt,
-//           state: adsData[i].user.state.name,
-//           image,
-//         });
-//       }
-//       return res.status(200).json({ ads, total });
-//     } catch (error) {
-//       res
-//         .status(500)
-//         .json({ error: "Failed to get list of ads", message: error.message });
-//     }
-//   };
+  export const update = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const ResData = req.body;
+      const info = await updateRes(id, ResData);
+      res.status(200).json({ info });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Failed to update disponibilidade", message: error.message });
+    }
+  };
+
   
-//   export const getItem = async (req, res) => {
-//     try {
-//       let id = req.params.id;
-//       if (!id) {
-//         res.status(500).json({ error: "Id is not provided" });
-//         return;
-//       }
-  
-//       let ad = await findAdById(parseInt(id));
-//       if (!ad) {
-//         res.status(404).json({ error: "We didn't find the product" });
-//         return;
-//       }
-  
-//       const updates = {};
-//       updates.views = ++ad.views;
-//       await updateAd(parseInt(id), updates);
-  
-//       let images = [];
-//       for (let i in ad.images) {
-//         images.push(`${process.env.BASE}/media/${ad.images[i].url}`);
-//       }
-  
-//       let category = await findCategoryById(ad.categoryId);
-//       let userInfo = await findUserById(ad.userId);
-//       return res.status(200).json({
-//         id: ad.id,
-//         title: ad.title,
-//         price: ad.price,
-//         priceNegotiable: ad.priceNegotiable,
-//         description: ad.description,
-//         dateCreated: ad.createdAt,
-//         views: ad.views,
-//         category,
-//         userInfo: {
-//           name: userInfo.name,
-//           email: userInfo.email,
-//         },
-//         images: images,
-//       });
-//     } catch (error) {
-//       throw new Error(`Failed to list ad: ${error.message}`);
-//     }
-//   };
