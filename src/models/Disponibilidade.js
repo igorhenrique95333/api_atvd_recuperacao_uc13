@@ -31,7 +31,6 @@ export const findDispByIdMesaDateTime = async (dados) => {
 };
 
 export const DelDisponibilidade = async (data) => {
-  console.log(data.id);
   return await prisma.disponibilidade.delete({
     where: {
       id: parseInt(data.id),

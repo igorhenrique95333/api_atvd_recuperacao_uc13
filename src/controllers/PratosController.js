@@ -45,7 +45,6 @@ export const encontrarPratosByClass = async (req, res) => {
 export const updatePratos = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const PratoData = req.body;
     const info = await updatePrato(id, PratoData);
     res.status(200).json({ info });

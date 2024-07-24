@@ -1,5 +1,5 @@
 import { findAllUsers, findUserById} from '../models/User.js';
-import { findUserByEmail} from '../models/User.js';
+import { findUserByEmail, DelUser, updateUser} from '../models/User.js';
 
 export const encontrarUser = async (req, res) => {
   try {
@@ -50,5 +50,30 @@ export const info = async (req, res) => {
       error: "Failed to get info of the funcionario",
       message: error.message,
     });
+  }
+};
+
+export const DeleteUser = async (req, res) => {
+  try {
+    let id = req.body.id;
+    const info = await DelUser(id);
+    res.status(200).json({ info });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to delete mesa", message: error.message });
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const UserData = req.body;
+    const info = await updateUser(id, UserData);
+    res.status(200).json({ info });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to update disponibilidade", message: error.message });
   }
 };

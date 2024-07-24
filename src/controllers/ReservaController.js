@@ -8,7 +8,6 @@
 
   export const encontrarDisp= async (req, res) => {
     try {
-      console.log("disp")
       const disponibilidade = await findAllDisponibildade();
       res.status(200).json({ disponibilidade });
     } catch (error) {
@@ -42,9 +41,7 @@
   export const encontrarDisponiblidadedate = async (req, res) => {
     try {
       let date = req.params.date;
-      console.log(date);
       const disponibilidade = await findDispByIdMesaDateTime(date);
-      console.log(disponibilidade);
       res.status(200).json({ disponibilidade });
     } catch (error) {
       res
@@ -69,7 +66,6 @@
       let data = req.query;
       const disponibilidade = await findMesaByDate(data);
       res.status(200).json({ disponibilidade});
-      console.log(data.mesaId);
     } catch (error) {
       res
         .status(500)

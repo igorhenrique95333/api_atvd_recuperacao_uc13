@@ -24,7 +24,6 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id)
       const DispData = req.body;
       const info = await updateDisp(id, DispData);
       res.status(200).json({ info });

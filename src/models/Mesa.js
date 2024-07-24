@@ -13,7 +13,7 @@ export const findMesaById = async (id) => {
     try {
       return await prisma.mesas.findUnique({
         where: {
-          id,
+          id: parseInt(id),
         },
       });
     } catch (error) {
@@ -44,4 +44,21 @@ export const findMesaById = async (id) => {
       throw new Error(`Failed to create ad: ${error.message}`);
     }
   };
-  
+
+  export const DelMesa = async (id) => {
+  return await prisma.mesas.delete({
+    where: {
+      id: parseInt(id),
+    },
+  });
+};
+export const updateMesa = async (id, MesaData) => {
+  return await prisma.mesas.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: {
+      mesaCapact: parent(MesaData.mesaCapact),
+    },
+  });
+};
